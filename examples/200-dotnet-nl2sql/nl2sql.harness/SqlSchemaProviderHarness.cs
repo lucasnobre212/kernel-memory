@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
-#define DISABLEHOST // Comment line to enable
+// #define DISABLEHOST // Comment line to enable
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using SemanticKernel.Data.Nl2Sql.Library.Schema;
 using Xunit;
 using Xunit.Abstractions;
+using MySql.Data.MySqlClient;
 
 namespace SemanticKernel.Data.Nl2Sql.Harness;
 
@@ -42,22 +43,26 @@ public sealed class SqlSchemaProviderHarness
     [Fact(Skip = SkipReason)]
     public async Task ReverseEngineerSchemaAsync()
     {
-        await this.CaptureSchemaAsync(
-            DatabaseAdventureWorksLt,
-            "Product, sales, and customer data for the AdventureWorks company.").ConfigureAwait(false);
+        // await this.CaptureSchemaAsync(
+        //     DatabaseAdventureWorksLt,
+        //     "Product, sales, and customer data for the AdventureWorks company.").ConfigureAwait(false);
 
-        await this.CaptureSchemaAsync(
-            DatabaseDescriptionTest,
-            "Associates registered users with interest categories.").ConfigureAwait(false);
+        // await this.CaptureSchemaAsync(
+        //     DatabaseDescriptionTest,
+        //     "Associates registered users with interest categories.").ConfigureAwait(false);
 
         // TODO: Reverse engineer your own database (comment-out others)
         //       Pass in optional 'tableNames' parameter to limit which tables or views are described.
+        await this.CaptureSchemaAsync(
+            "YourSchema",
+            "A description for your-schema.").ConfigureAwait(false);
     }
 
     private async Task CaptureSchemaAsync(string databaseKey, string? description, params string[] tableNames)
     {
-        var connectionString = Harness.Configuration.GetConnectionString(databaseKey);
-        using var connection = new SqlConnection(connectionString);
+        var connectionString = "server=localhost;port=3306;database=test;user=root;password=example";
+        using var connection = new MySqlConnection(connectionString);
+
         await connection.OpenAsync().ConfigureAwait(false);
 
         var provider = new SqlSchemaProvider(connection);

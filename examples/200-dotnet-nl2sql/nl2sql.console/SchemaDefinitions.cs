@@ -17,8 +17,9 @@ internal static class SchemaDefinitions
     /// </remarks>
     public static IEnumerable<string> GetNames()
     {
-        yield return "adventureworkslt";
-        yield return "descriptiontest";
+        // yield return "adventureworkslt";
+        // yield return "descriptiontest";
+        yield return "your-schema";
         // TODO: List your own schema here (comment-out others for focused exploration)
     }
 }
